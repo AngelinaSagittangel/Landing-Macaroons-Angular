@@ -12,3 +12,5 @@
 - Frontend: Angular 21, TypeScript.
 - Стили: SCSS.
 - Навигация: Нативный scrollIntoView для плавного скролла.
+## Запуск проекта
+- `npm i` && `ng serve --open`
