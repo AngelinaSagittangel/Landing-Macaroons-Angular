@@ -1,16 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ProductType } from './types/product.type';
 import { AdvantageType } from './types/advantage.type';
 import { FormsModule } from '@angular/forms';
+import { ProductsService } from './services/products-service';
+import { CartCountService } from './services/cart-count-service';
+import { AdvantagesComponents } from './components/advantages-components/advantages-components';
+import { ProductsComponents } from './components/products-components/products-components';
+import { BtnBgDirective } from './directives/btn-bg';
+import { PhoneMaskPipe } from './pipes/phone-mask-pipe';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AdvantagesComponents, ProductsComponents, BtnBgDirective],
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  providers: [ProductsService],
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('Macaroons');
 
   public advantages: AdvantageType[] = [
@@ -32,38 +39,42 @@ export class App {
     },
   ];
 
-  public products: ProductType[] = [
-    {
-      image: 'product1.png',
-      title: 'Макарун с малиной',
-      quantity: '1 шт.',
-      price: '1,70 руб.',
-    },
-    {
-      image: 'product2.png',
-      title: 'Макарун с манго',
-      quantity: '1 шт.',
-      price: '1,70 руб.',
-    },
-    {
-      image: 'product3.png',
-      title: 'Пирог с ванилью',
-      quantity: '1 шт.',
-      price: '1,70 руб.',
-    },
-    {
-      image: 'product4.png',
-      title: 'Пирог с фисташками',
-      quantity: '1 шт.',
-      price: '1,70 руб.',
-    },
-  ];
+  public products: ProductType[] = [];
 
   public formValues = {
     productTitle: '',
     userName: '',
     phone: '',
   };
+
+  public displayPhone: string = '';
+
+  public onPhoneInput(raw: string): void {
+    const digits = raw.replace(/\D/g, '').substring(0, 12);
+
+    this.formValues.phone = digits;
+    if (digits.length === 12) {
+      const phonePipe = new PhoneMaskPipe();
+      this.displayPhone = phonePipe.transform(digits) || digits;
+    } else {
+      this.displayPhone = digits;
+    }
+  }
+
+  lateData: Promise<string> | null = null;
+
+  constructor(
+    private productService: ProductsService,
+    public cartCount: CartCountService,
+    public commonCartPrice: CartCountService,
+  ) {}
+
+  ngOnInit() {
+    this.lateData = new Promise<string>(function () {
+      setTimeout(() => {}, 3000);
+    });
+    this.products = this.productService.getProducts();
+  }
 
   public showPresent: boolean = true;
 
@@ -77,6 +88,11 @@ export class App {
   public addToCart(product: ProductType, target: HTMLElement): void {
     this.scrollTo(target);
     this.formValues.productTitle = product.title.toUpperCase();
+
+    this.cartCount.count++;
+    this.commonCartPrice.commonCartPrice += product.price;
+
+    alert(product.title + ' добавлен в корзину!');
   }
 
   public createOrder() {
@@ -94,6 +110,10 @@ export class App {
       this.formValues.productTitle = '';
       this.formValues.userName = '';
       this.formValues.phone = '';
+      this.displayPhone = '';
+
+      this.cartCount.count = 0;
+      this.commonCartPrice.commonCartPrice = 0;
     }
   }
 }

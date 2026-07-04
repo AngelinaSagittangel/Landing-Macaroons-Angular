@@ -80,7 +80,7 @@
           Macaroon!
         </div>
         <div class="main-text-action">
-          <button class="button btn-main" (click)="scrollTo(productsElement)">
+          <button class="button btn-main" (click)="scrollTo(productsElement)" btnBg>
             Выбрать макарун
           </button>
         </div>
@@ -115,11 +115,7 @@
   <div class="advantages-items">
     <div class="container">
       @for (advantage of advantages; track $index; let i = $index) {
-        <div class="advantages-item">
-          <div class="advantages-number">{{ i + 1 }}</div>
-          <div class="advantages-tittle">{{ advantage.title }}</div>
-          <div class="advantages-info">{{ advantage.info }}</div>
-        </div>
+        <advantages-components [advantage]="advantage" [i]="i"> </advantages-components>
       }
     </div>
   </div>
@@ -132,23 +128,11 @@
     </div>
     <div class="product-items">
       @for (product of products; track $index; let i = $index) {
-        <div class="product">
-          <div class="product-image">
-            <img src="images/{{ product.image }}" alt="Macaroon {{ i + 1 }}" />
-          </div>
-          <div class="product-tittle">{{ product.title }}</div>
-          <div class="product-info">
-            <div class="product-text">
-              <div class="product-info-quantity">{{ product.quantity }}</div>
-              <div class="product-info-price">{{ product.price }}</div>
-            </div>
-            <div class="product-action">
-              <button class="button btn-product" (click)="addToCart(product, orderElement)">
-                Заказать
-              </button>
-            </div>
-          </div>
-        </div>
+        <product
+          [product]="product"
+          [i]="i"
+          (addToCartEvent)="addToCart($event, orderElement)"
+        ></product>
       }
     </div>
   </div>
@@ -195,16 +179,18 @@
             </div>
             <div class="order-form-info-input-phone">
               <input
-                type="number"
+                type="tel"
                 class="input input-phone"
                 placeholder="+375 (__) ___ - __ - __"
                 name="phone"
-                [(ngModel)]="formValues.phone"
+                [(ngModel)]="displayPhone"
+                (ngModelChange)="onPhoneInput($event)"
+                maxlength="16"
               />
             </div>
           </div>
           <div class="order-form-action">
-            <button class="button btn-order" (click)="createOrder()">Оформить заказ</button>
+            <button class="button btn-order" (click)="createOrder()" btnBg>Оформить заказ</button>
           </div>
         </form>
       </div>
@@ -243,9 +229,12 @@
 @if (showPresent) {
   <div class="container">
     <div class="promotion">
-      <div class="promotion-text">Оформите заказ и получите подарок!</div>
+      <div class="promotion-text">
+        {{ commonCartPrice.commonCartPrice | currency: 'руб' : 'руб' : '1.2-2' : 'ru-RU' }}
+      </div>
       <button class="btn-promotion">
-        <img src="images/present.png" alt="Present" />
+        <img src="images/cart.png" alt="Cart" />
+        <span class="cart-badge">{{ cartCount.count }}</span>
       </button>
     </div>
   </div>

@@ -1,0 +1,35 @@
+.advantages-item {
+  .advantages-number {
+    border-radius: 50%;
+    background: #821328;
+    width: 70px;
+    height: 70px;
+    font-size: 60px;
+    font-family: GilroyExtrabold, sans-serif;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 13px;
+    line-height: 0.75;
+  }
+
+  &:hover .advantages-number {
+    background: #eba8b1;
+    color: #821328;
+  }
+
+  .advantages-tittle {
+    font-size: 20px;
+    font-family: GilroyExtrabold, sans-serif;
+    color: rgb(51, 25, 7);
+    margin-bottom: 20px;
+  }
+
+  .advantages-info {
+    font-size: 15px;
+    font-family: GilroyMedium, sans-serif;
+    color: rgb(51, 25, 7);
+    line-height: 1.333;
+  }
+}
