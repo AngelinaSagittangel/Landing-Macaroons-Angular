@@ -1,0 +1,2 @@
+export default `body{margin:0}.button{border:none;font-size:18px;font-family:GilroyBold,sans-serif;color:#fff;box-sizing:border-box;cursor:pointer;outline:none;text-align:center}
+`;
