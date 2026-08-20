@@ -59,10 +59,10 @@
             <a (click)="scrollTo(productsElement)">Пироженки</a>
           </li>
           <li class="menu-item">
-            <a  (click)="scrollTo(advantagesElement)">О нас</a>
+            <a (click)="scrollTo(advantagesElement)">О нас</a>
           </li>
           <li class="menu-item">
-            <a  (click)="scrollTo(orderElement)">Оформить заказ</a>
+            <a (click)="scrollTo(orderElement)">Оформить заказ</a>
           </li>
         </ul>
       </nav>
@@ -86,7 +86,11 @@
         </div>
       </div>
       <div class="main-image">
-        <img src="/Landing-Macaroons-Angular/images/main.img.png" alt="Macaroons" class="main-img" />
+        <img
+          src="/Landing-Macaroons-Angular/images/main.img.png"
+          alt="Macaroons"
+          class="main-img"
+        />
       </div>
     </div>
   </div>
@@ -190,7 +194,9 @@
             </div>
           </div>
           <div class="order-form-action">
-            <button class="button btn-order" (click)="createOrder()" btnBg>Оформить заказ</button>
+            <button type="button" class="button btn-order" (click)="createOrder()" btnBg>
+              Оформить заказ
+            </button>
           </div>
         </form>
       </div>
